@@ -1,0 +1,30 @@
+---
+ - hosts: all
+   tasks:
+     - name: download tar file
+       get_url:
+         url:  https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-3.0.2-02-unix.tar.gz
+         dest: /opt
+     - name: extract tar file
+       unarchive:
+         src: /opt/nexus-3.0.2-02-unix.tar.gz
+         dest: /opt
+         remote_src: yes
+     - name: create user
+       user:
+         name: subbu
+         uid: 1008
+     - name: ownership change
+       file:
+         dest: /opt/nexus-3.0.2-02
+         owner: subbu
+         group: subbu
+         recurse: yes
+     - name: make nexus runned by "nexus" user
+       lineinfile:
+         dest: /opt/nexus-3.0.2-02/bin/nexus.rc
+         line: run_as_user="subbu"
+      - name: start the nexus
+        
+
+       
